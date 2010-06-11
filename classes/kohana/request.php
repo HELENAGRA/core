@@ -102,11 +102,6 @@ class Kohana_Request {
 	public static $is_ajax = FALSE;
 
 	/**
-	 * @var  boolean  SUB request
-	 */
-	public static $is_sub = FALSE;
-
-	/**
 	 * @var  object  main request instance
 	 */
 	public static $instance;
@@ -310,11 +305,7 @@ class Kohana_Request {
 	 */
 	public static function factory($uri)
 	{
-                // Flag as sub-request
-                $request = new Request($uri);
-                $request::$is_sub = TRUE;
-
-                return $request;
+                return new Request($uri);
 	}
 
 	/**
@@ -959,6 +950,11 @@ class Kohana_Request {
 	}
 
 	/**
+	 * @var  boolean  SUB request
+	 */
+	public $is_sub = FALSE;
+
+	/**
 	 * Processes the request, executing the controller action that handles this
 	 * request, determined by the [Route].
 	 *
@@ -980,6 +976,12 @@ class Kohana_Request {
 	 */
 	public function execute()
 	{
+		if ($this !== Request::$instance)
+		{
+			// Set the sub request flag
+			$this->is_sub = TRUE;
+		}
+
 		// Create the class prefix
 		$prefix = 'controller_';
 
