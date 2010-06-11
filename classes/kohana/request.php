@@ -976,12 +976,6 @@ class Kohana_Request {
 	 */
 	public function execute()
 	{
-		if ($this !== Request::$instance)
-		{
-			// Set the sub request flag
-			$this->is_sub = TRUE;
-		}
-
 		// Create the class prefix
 		$prefix = 'controller_';
 
@@ -1004,6 +998,12 @@ class Kohana_Request {
 
 			// Start benchmarking
 			$benchmark = Profiler::start('Requests', $benchmark);
+		}
+
+		if ($this !== Request::$instance AND Request::$current)
+		{
+			// Set the sub request flag
+			$this->is_sub = TRUE;
 		}
 
 		// Store the currently active request
