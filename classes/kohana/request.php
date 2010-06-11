@@ -102,6 +102,11 @@ class Kohana_Request {
 	public static $is_ajax = FALSE;
 
 	/**
+	 * @var  boolean  SUB request
+	 */
+	public static $is_sub = FALSE;
+
+	/**
 	 * @var  object  main request instance
 	 */
 	public static $instance;
@@ -305,7 +310,11 @@ class Kohana_Request {
 	 */
 	public static function factory($uri)
 	{
-		return new Request($uri);
+                // Flag as sub-request
+                $request = new Request($uri);
+                $request::$is_sub = TRUE;
+
+                return $request;
 	}
 
 	/**
